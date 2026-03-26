@@ -1,0 +1,27 @@
+# Cookie / secret — không commit
+.cookie
+.cookie.json
+.tiktok_cookie
+.tiktok_cookie.json
+venv/
+*.xlsx
+
+# Python
+*.pyc
+__pycache__/
+
+# Credentials
+google_credentials.json
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Output files
+tiktok_videos_*.json
+tiktok_error_*.png

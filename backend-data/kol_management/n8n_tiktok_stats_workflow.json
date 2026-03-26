@@ -1,0 +1,223 @@
+{
+  "name": "TikTok Video Stats API",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "tiktok-stats",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "tiktok-stats-webhook"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "http-request",
+      "name": "HTTP Request - Get TikTok HTML",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ input\nconst inputData = $input.first().json;\nconst htmlContent = inputData.data || \"\";\nconst setCookieHeader = inputData.headers['set-cookie'];\n\n// Xử lý gộp Cookie thành chuỗi\nlet cookieString = \"\";\nif (Array.isArray(setCookieHeader)) {\n    cookieString = setCookieHeader.join(\"; \");\n} else if (typeof setCookieHeader === 'string') {\n    cookieString = setCookieHeader;\n}\n\n// Trích xuất JSON từ thẻ __UNIVERSAL_DATA_FOR_REHYDRATION__\nlet extractedJson = {};\nconst regex = /<script [^>]*id=\"__UNIVERSAL_DATA_FOR_REHYDRATION__\"[^>]*>([\\s\\S]*?)<\\/script>/i;\nconst match = htmlContent.match(regex);\n\nif (match && match[1]) {\n    try {\n        extractedJson = JSON.parse(match[1].trim());\n    } catch (e) {\n        extractedJson = { error: \"Không thể parse JSON từ HTML\" };\n    }\n} else {\n    extractedJson = { error: \"Không tìm thấy __UNIVERSAL_DATA_FOR_REHYDRATION__\" };\n}\n\n// Trả về kết quả\nreturn {\n    data: {\n        ...extractedJson,\n        cookie: cookieString\n    }\n};"
+      },
+      "id": "code-parse-json",
+      "name": "Code - Parse JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "views",
+              "name": "views",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.stats?.playCount || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "likes",
+              "name": "likes",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.stats?.diggCount || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "comments",
+              "name": "comments",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.stats?.commentCount || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "shares",
+              "name": "shares",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.stats?.shareCount || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "saves",
+              "name": "saves",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.stats?.collectCount || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "follower",
+              "name": "follower",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.authorStats?.followerCount || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "video_id",
+              "name": "video_id",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.id || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "author",
+              "name": "author",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.author?.uniqueId || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "description",
+              "name": "description",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.desc || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "date",
+              "name": "date",
+              "value": "={{ $json.data.__DEFAULT_SCOPE__['webapp.video-detail']?.itemInfo?.itemStruct?.createTime || 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "error",
+              "name": "error",
+              "value": "={{ $json.data.error || '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "edit-fields",
+      "name": "Edit Fields - Extract Stats",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tính engagement rate\nconst data = $input.first().json;\n\nconst views = data.views || 0;\nconst likes = data.likes || 0;\nconst comments = data.comments || 0;\nconst shares = data.shares || 0;\nconst saves = data.saves || 0;\n\nlet engagement_rate = 0;\nif (views > 0) {\n    const total_engagement = likes + comments + shares + saves;\n    engagement_rate = Math.round((total_engagement / views) * 10000) / 100;\n}\n\nreturn {\n    ...data,\n    engagement_rate: engagement_rate,\n    total_engagement: likes + comments + shares + saves\n};"
+      },
+      "id": "code-calculate",
+      "name": "Code - Calculate Engagement",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Get TikTok HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Get TikTok HTML": {
+      "main": [
+        [
+          {
+            "node": "Code - Parse JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Parse JSON": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields - Extract Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields - Extract Stats": {
+      "main": [
+        [
+          {
+            "node": "Code - Calculate Engagement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Calculate Engagement": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-03-25T00:00:00.000Z",
+  "versionId": "1"
+}

@@ -1,0 +1,95 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.next/
+out/
+.turbo/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Cookies & Credentials
+*.cookie
+.cookie
+.cookie.json
+*_cookie.json
+google_credentials.json
+credentials.json
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Exports & Backups
+exports/
+backup_json/
+*.xlsx
+*.xls
+*.csv
+
+# Test files
+debug_*.html
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Agent sale specific
+agent_sale_v3/agent_sale/.venv/
+agent_sale_v3/agent_sale/uv.lock
+
+# Frontend
+frontend-base/.next/
+frontend-base/node_modules/
+frontend-base/.turbo/
+
+# Kalodata exports
+backend-data/kalodata/exports/
+backend-data/backup_json/
