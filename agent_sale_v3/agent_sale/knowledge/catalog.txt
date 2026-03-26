@@ -1,0 +1,211 @@
+products:
+
+# ================= BASIC =================
+
+- model: HD-1000LITE
+  brand: IonQ
+  price: "249.000đ - 329.000đ"
+  watt: 1000
+  weight: "400g"
+  noise_level: "trung bình"
+  features:
+    - 2 mức gió
+    - 1 mức nhiệt
+    - thiết kế nhỏ gọn
+  best_for:
+    - học sinh sinh viên
+    - dùng nhanh hàng ngày
+  description: >
+    Model giá rẻ, gọn nhẹ, phù hợp nhu cầu sấy cơ bản. Sấy tóc mỏng khá ổn nhưng sẽ hơi lâu với tóc dày.
+  pros:
+    - giá rẻ
+    - dễ dùng
+  cons:
+    - công suất yếu
+    - không có ion
+
+---
+
+- model: HD-1200BASIC
+  brand: IonQ
+  price: "299.000đ - 399.000đ"
+  watt: 1200
+  weight: "450g"
+  noise_level: "trung bình"
+  features:
+    - 2 mức gió
+    - gấp gọn
+  best_for:
+    - cá nhân
+    - mang đi du lịch
+  description: >
+    Phiên bản nâng cấp nhẹ từ dòng Lite, có thể gấp gọn tiện mang theo. Phù hợp người cần sự tiện lợi.
+  pros:
+    - gọn
+    - tiện
+  cons:
+    - không phù hợp tóc dày
+
+---
+
+# ================= MID =================
+
+- model: HD-1600CARE
+  brand: IonQ
+  price: "399.000đ - 549.000đ"
+  watt: 1600
+  weight: "520g"
+  noise_level: "êm"
+  features:
+    - 2 mức gió
+    - 2 mức nhiệt
+    - bảo vệ quá nhiệt
+  best_for:
+    - gia đình
+    - dùng hàng ngày
+  description: >
+    Dòng cân bằng giữa giá và hiệu năng. Sấy nhanh hơn basic, phù hợp đa số người dùng.
+  pros:
+    - ổn định
+    - không quá ồn
+  cons:
+    - chưa có ion
+
+---
+
+- model: HD-1800ION
+  brand: IonQ
+  price: "499.000đ - 699.000đ"
+  watt: 1800
+  weight: "550g"
+  noise_level: "êm"
+  features:
+    - 3 mức nhiệt
+    - ion âm chống xù
+    - gió mát
+  best_for:
+    - tóc dài
+    - tóc dễ xù
+  description: >
+    Model bán chạy nhất, có ion giúp tóc mượt hơn rõ rệt. Sấy nhanh và phù hợp dùng hàng ngày.
+  pros:
+    - giảm xù
+    - sấy nhanh
+  cons:
+    - giá cao hơn dòng basic
+
+---
+
+# ================= ADVANCED =================
+
+- model: HD-1900SILENT
+  brand: IonQ
+  price: "699.000đ - 899.000đ"
+  watt: 1900
+  weight: "580g"
+  noise_level: "rất êm"
+  features:
+    - công nghệ giảm ồn
+    - 3 mức nhiệt
+    - ion âm
+  best_for:
+    - người nhạy cảm tiếng ồn
+    - dùng ban đêm
+  description: >
+    Điểm mạnh là cực êm, phù hợp gia đình có trẻ nhỏ hoặc người thích yên tĩnh.
+  pros:
+    - rất êm
+    - mượt tóc
+  cons:
+    - không mạnh bằng dòng PRO
+
+---
+
+- model: HD-2000PRO
+  brand: IonQ
+  price: "799.000đ - 1.200.000đ"
+  watt: 2000
+  weight: "650g"
+  noise_level: "êm vừa"
+  features:
+    - công suất cao
+    - cool shot
+    - đầu sấy tạo kiểu
+  best_for:
+    - salon
+    - tạo kiểu
+  description: >
+    Công suất lớn, sấy cực nhanh. Phù hợp người cần tạo kiểu và sử dụng cường độ cao.
+  pros:
+    - mạnh
+    - bền
+  cons:
+    - hơi nặng
+
+---
+
+# ================= PREMIUM =================
+
+- model: HD-2200IONMAX
+  brand: IonQ
+  price: "1.200.000đ - 1.500.000đ"
+  watt: 2200
+  weight: "620g"
+  noise_level: "êm"
+  features:
+    - ion âm cao cấp
+    - motor bền
+    - kiểm soát nhiệt thông minh
+  best_for:
+    - tóc yếu / hư tổn
+  description: >
+    Dòng cao cấp, bảo vệ tóc tốt hơn khi sấy nhiệt cao. Giữ độ ẩm và giảm hư tổn.
+  pros:
+    - bảo vệ tóc tốt
+    - cao cấp
+  cons:
+    - giá cao
+
+---
+
+- model: HD-2300SALONX
+  brand: IonQ
+  price: "1.500.000đ - 2.000.000đ"
+  watt: 2300
+  weight: "700g"
+  noise_level: "êm vừa"
+  features:
+    - motor salon chuyên nghiệp
+    - sấy siêu nhanh
+    - đầu tạo kiểu chuyên sâu
+  best_for:
+    - salon chuyên nghiệp
+  description: >
+    Dòng mạnh nhất, dùng cho salon. Sấy cực nhanh và tạo kiểu chuẩn.
+  pros:
+    - cực mạnh
+    - chuyên nghiệp
+  cons:
+    - không phù hợp dùng cá nhân
+
+---
+
+# ================= TRAVEL =================
+
+- model: TRAVEL-900
+  brand: IonQ
+  price: "199.000đ - 299.000đ"
+  watt: 900
+  weight: "300g"
+  noise_level: "nhỏ"
+  features:
+    - siêu nhẹ
+    - gọn
+  best_for:
+    - du lịch
+  description: >
+    Nhỏ gọn tiện mang theo. Không phù hợp dùng lâu hoặc tóc dày.
+  pros:
+    - cực nhẹ
+  cons:
+    - yếu
