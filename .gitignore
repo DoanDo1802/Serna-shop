@@ -93,3 +93,6 @@ frontend-base/.turbo/
 # Kalodata exports
 backend-data/kalodata/exports/
 backend-data/backup_json/
+
+# Tikkocampus - not ready to push yet
+Tikkocampus/
