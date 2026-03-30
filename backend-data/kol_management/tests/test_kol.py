@@ -5,7 +5,7 @@ import os
 import sys
 
 # Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from kol_management.sheets_reader import read_kol_data_from_sheets
 from kol_management.tiktok_stats import get_video_stats

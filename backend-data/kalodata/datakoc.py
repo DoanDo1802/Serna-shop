@@ -19,11 +19,11 @@ def get_follower_stats(target_url):
     # Đọc Cookie từ file hoặc môi trường
     import os
     _cookie_file = os.path.join(os.path.dirname(__file__) or ".", ".cookie")
-    if os.environ.get("KALODATA_COOKIE"):
-        COOKIE_STR = os.environ.get("KALODATA_COOKIE", "")
-    elif os.path.isfile(_cookie_file):
+    if os.path.isfile(_cookie_file):
         with open(_cookie_file, "r", encoding="utf-8") as f:
             COOKIE_STR = f.read().split("\n")[0].strip()
+    elif os.environ.get("KALODATA_COOKIE"):
+        COOKIE_STR = os.environ.get("KALODATA_COOKIE", "")
     else:
         COOKIE_STR = ""
         

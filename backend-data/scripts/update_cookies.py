@@ -8,13 +8,13 @@ import sys
 import re
 
 # Add paths
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "kalodata"))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tiktok"))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, ROOT_DIR)
 
 from kalodata.auto_cookie import get_kalodata_cookie
 from tiktok.auto_cookie import get_tiktok_cookie
 
-ENV_FILE = os.path.join(os.path.dirname(__file__), ".env")
+ENV_FILE = os.path.join(ROOT_DIR, ".env")
 
 def update_env_file(key, value):
     """Update hoặc thêm key=value vào file .env"""
@@ -49,9 +49,14 @@ def update_env_file(key, value):
 def main():
     args = sys.argv[1:]
     
-    update_kalodata = "--kalodata" in args or len(args) == 0
-    update_tiktok = "--tiktok" in args or len(args) == 0
+    update_kalodata = "--kalodata" in args
+    update_tiktok = "--tiktok" in args
     force = "--force" in args
+    
+    # Nếu không chỉ định cái nào, thì update cả 2
+    if not update_kalodata and not update_tiktok:
+        update_kalodata = True
+        update_tiktok = True
     
     print("🚀 Auto Cookie Updater")
     print("=" * 60)

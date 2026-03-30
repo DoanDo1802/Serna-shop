@@ -57,6 +57,37 @@ def read_kol_data_from_sheets(spreadsheet_url: str, sheet_name: str = "KOL_manag
         print(f"❌ Lỗi đọc Google Sheets: {e}")
         raise
 
+def read_generic_sheet_data(spreadsheet_url: str, sheet_name: str) -> List[Dict[str, Any]]:
+    """
+    Đọc dữ liệu thô từ bất kỳ Google Sheet nào
+    """
+    try:
+        gc = gspread.service_account(filename=CREDENTIALS_FILE)
+        sh = gc.open_by_url(spreadsheet_url)
+        worksheet = sh.worksheet(sheet_name)
+        
+        # Lấy tất cả dữ liệu (bao gồm cả header)
+        return worksheet.get_all_records()
+        
+    except Exception as e:
+        print(f"❌ Lỗi đọc Google Sheets ({sheet_name}): {e}")
+        raise
+
+def read_sheet_raw_values(spreadsheet_url: str, sheet_name: str) -> List[List[Any]]:
+    """
+    Đọc dữ liệu thô (List of Lists) từ Google Sheet, chấp nhận cả header trùng lặp.
+    """
+    try:
+        gc = gspread.service_account(filename=CREDENTIALS_FILE)
+        sh = gc.open_by_url(spreadsheet_url)
+        worksheet = sh.worksheet(sheet_name)
+        
+        return worksheet.get_all_values()
+        
+    except Exception as e:
+        print(f"❌ Lỗi đọc giá trị thô Google Sheets ({sheet_name}): {e}")
+        raise
+
 if __name__ == "__main__":
     # Test
     test_url = "https://docs.google.com/spreadsheets/d/1o6qMdV7bQ7ADDG8llRD1oy58iwfaa3mhFRR3DtsmutE/edit"

@@ -85,7 +85,8 @@ def send_tiktok_dm_to_user(profile_url, message, cookie_string=None):
         
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
-            viewport={"width": 1280, "height": 720}
+            viewport={"width": 1280, "height": 720},
+            permissions=["clipboard-read", "clipboard-write"]
         )
         
         print("Đang nạp Cookie đăng nhập...")
@@ -120,7 +121,29 @@ def send_tiktok_dm_to_user(profile_url, message, cookie_string=None):
                 
             if chat_box:
                 chat_box.click()
-                page.keyboard.type(message, delay=100)
+                
+                import sys
+                
+                # Xử lý xuống dòng: gõ dòng đầu tiên, sau đó paste đoạn còn lại để tiết kiệm thời gian
+                lines = message.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+                if len(lines) > 0:
+                    first_line = lines[0] # VD: "ionQ chào bạn,"
+                    # Gõ dòng đầu tiên giống người thật
+                    page.keyboard.type(first_line, delay=50)
+                    
+                    if len(lines) > 1:
+                        # Đưa ký tự xuống dòng (\n) vào đầu đoạn paste luôn để tránh lỗi nhấn Enter bị tự gửi
+                        rest_text = "\n" + "\n".join(lines[1:])
+                        
+                        # Copy phần còn lại vào Clipboard của trình duyệt
+                        page.evaluate("text => navigator.clipboard.writeText(text)", rest_text)
+                        page.wait_for_timeout(100)
+                        
+                        # Paste nội dung (Cmd+V trên Mac hoặc Ctrl+V)
+                        modifier = "Meta" if sys.platform == "darwin" else "Control"
+                        page.keyboard.press(f"{modifier}+v")
+                        page.wait_for_timeout(500)
+                        
                 page.wait_for_timeout(1000)
                 
                 print("🚀 Đang bấm Gửi (Enter)...")

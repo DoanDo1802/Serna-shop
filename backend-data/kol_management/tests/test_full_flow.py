@@ -4,7 +4,7 @@ Test toàn bộ flow: Google Sheets → n8n → Ranking
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from kol_management.kol_processor import process_kol_data, rank_kols_by_engagement
 

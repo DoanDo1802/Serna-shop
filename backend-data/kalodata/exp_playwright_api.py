@@ -49,13 +49,13 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
     _cookie_file = os.path.join(os.path.dirname(__file__) or ".", ".cookie")
     COOKIE_STR = ""
     
-    if os.environ.get("KALODATA_COOKIE"):
-        COOKIE_STR = os.environ.get("KALODATA_COOKIE", "")
-        print("✅ Đã load cookie từ environment variable")
-    elif os.path.isfile(_cookie_file):
+    if os.path.isfile(_cookie_file):
         with open(_cookie_file, "r", encoding="utf-8") as f:
             COOKIE_STR = f.read().split("\n")[0].strip()
         print("✅ Đã load cookie từ file .cookie")
+    elif os.environ.get("KALODATA_COOKIE"):
+        COOKIE_STR = os.environ.get("KALODATA_COOKIE", "")
+        print("✅ Đã load cookie từ environment variable")
     else:
         raise Exception(
             "❌ Không tìm thấy KALODATA_COOKIE!\n"
@@ -132,7 +132,7 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
             ],
         )
         context = browser.new_context(
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
             viewport={"width": 1920, "height": 1080},
             locale="vi-VN",
             timezone_id="Asia/Ho_Chi_Minh",
@@ -144,13 +144,12 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
             "country": "VN",
             "currency": "VND",
             "language": "vi-VN",
-            "accept": "application/json, text/plain, */*",
-            "accept-language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
         })
 
+        # Mở trang trước để bypass Cloudflare
+        print("🌐 Đang mở trang Kalodata và bypass Cloudflare...")
         page = context.new_page()
-        
-        # Stealth mode - ẩn dấu hiệu automation
+        # Stealth mode script
         page.add_init_script("""
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined
@@ -237,9 +236,9 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
                     }
                     
                     try {
-                        return { success: true, data: JSON.parse(text) };
+                        return { success: true, data: JSON.parse(text), status: r.status };
                     } catch(e) {
-                        return { success: false, error: 'Not JSON', raw: text.slice(0, 200) };
+                        return { success: false, error: 'Not JSON', raw: text.slice(0, 500), status: r.status };
                     }
                 } catch(err) {
                     return { success: false, error: err.message };
@@ -254,9 +253,10 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
             print("📸 Đã chụp screenshot lỗi: kalodata_error_query.png")
             
             browser.close()
-            error_msg = f"Query list failed: {ql_result.get('error', 'Unknown')}"
+            error_msg = f"Query list failed: {ql_result.get('error', 'Unknown')}\n"
+            error_msg += f"Status: {ql_result.get('status')}\n"
             if 'raw' in ql_result:
-                error_msg += f"\nResponse: {ql_result['raw']}"
+                error_msg += f"Response: {ql_result['raw']}"
             error_msg += "\n\n💡 Có thể do:"
             error_msg += "\n1. Cookie đã hết hạn - Chạy: python3 test_cookie.py"
             error_msg += "\n2. Cloudflare đang chặn - Thử lại sau vài phút"
@@ -284,9 +284,9 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
                     });
                     const text = await r.text();
                     try {
-                        return { success: true, data: JSON.parse(text) };
+                        return { success: true, data: JSON.parse(text), status: r.status };
                     } catch(e) {
-                        return { success: false, error: 'Not JSON', raw: text.slice(0, 200) };
+                        return { success: false, error: 'Not JSON', raw: text.slice(0, 500), status: r.status };
                     }
                 } catch(err) {
                     return { success: false, error: err.message };
@@ -297,9 +297,10 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
         
         if not data.get('success'):
             browser.close()
-            error_msg = f"Start task failed: {data.get('error', 'Unknown')}"
+            error_msg = f"Start task failed: {data.get('error', 'Unknown')}\n"
+            error_msg += f"Status: {data.get('status')}\n"
             if 'raw' in data:
-                error_msg += f"\nResponse: {data['raw']}"
+                error_msg += f"Response: {repr(data['raw'])[:1000]}"
             raise Exception(error_msg)
         
         data = data['data']
@@ -337,9 +338,9 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
                         });
                         const text = await r.text();
                         try {
-                            return { success: true, data: JSON.parse(text) };
+                            return { success: true, data: JSON.parse(text), status: r.status };
                         } catch(e) {
-                            return { success: false, error: 'Not JSON' };
+                            return { success: false, error: 'Not JSON', raw: text.slice(0, 500), status: r.status };
                         }
                     } catch(err) {
                         return { success: false, error: err.message };
@@ -349,7 +350,10 @@ def export_kalodata_data(start_date=None, end_date=None, revenue_min=50000000,
             )
             
             if not status_res.get('success'):
-                print(f"⚠️ Poll error: {status_res.get('error')}")
+                error_info = status_res.get('error')
+                if 'raw' in status_res:
+                    error_info += f" (Status {status_res.get('status')}): {status_res['raw']}"
+                print(f"⚠️ Poll error: {error_info}")
                 time.sleep(5)
                 continue
             

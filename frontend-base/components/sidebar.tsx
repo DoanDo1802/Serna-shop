@@ -8,7 +8,6 @@ import {
   TrendingUp,
   Package,
   Settings,
-  Bot,
   BarChart3,
   Users,
   Database,
@@ -66,12 +65,6 @@ export function Sidebar() {
       label: 'Quản lý KOL',
       href: '/kol-management',
       icon: <UserCheck className="w-4 h-4" />,
-    },
-    {
-      id: 'agent-config',
-      label: 'Agent sale',
-      href: '/agent-config',
-      icon: <Bot className="w-4 h-4" />,
     },
     {
       id: 'analytics',

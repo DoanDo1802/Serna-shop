@@ -90,7 +90,7 @@ def get_kalodata_cookie(force_refresh=False, headless=False):
         )
         
         context = browser.new_context(
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
             viewport={"width": 1920, "height": 1080},
             locale="vi-VN",
             timezone_id="Asia/Ho_Chi_Minh",
@@ -107,12 +107,6 @@ def get_kalodata_cookie(force_refresh=False, headless=False):
                     pass
         else:
             print("🔄 Force refresh - Không load cookie cũ (để bạn có thể đổi tài khoản)")
-        if old_cookies:
-            try:
-                context.add_cookies(old_cookies)
-                print("📦 Đã load cookie cũ")
-            except:
-                pass
         
         page = context.new_page()
         

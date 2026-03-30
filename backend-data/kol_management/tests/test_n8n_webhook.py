@@ -5,7 +5,7 @@ import os
 import sys
 import json
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 from kol_management.tiktok_stats import get_video_stats_via_n8n
 
